@@ -21,7 +21,7 @@ jobs:
         shell: bash
         run: |
           export RELEASE=$(curl -s https://storage.googleapis.com/kubevirt-prow/release/kubevirt/kubevirt/stable.txt)
-          git checkout -b ${RELEASE} main || git checkout ${RELEASE}
+          git checkout -b ${RELEASE} master || git checkout ${RELEASE}
           mkdir ./deploy
 
           mv ./kustomization.tmpl.yaml ./deploy/kustomization.yaml
