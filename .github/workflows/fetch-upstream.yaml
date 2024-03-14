@@ -1,0 +1,34 @@
+name: Fetch upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  fetch-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Git setup
+        shell: bash
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      - name: Fetch files
+        shell: bash
+        run: |
+          export RELEASE=$(curl -s https://storage.googleapis.com/kubevirt-prow/release/kubevirt/kubevirt/stable.txt)
+          git checkout -b ${RELEASE} main || git checkout ${RELEASE}
+          mkdir ./deploy
+
+          mv ./kustomization.tmpl.yaml ./deploy/kustomization.yaml
+          curl -vL -o ./deploy/1-kubevirt-operator.yaml https://github.com/kubevirt/kubevirt/releases/download/${RELEASE}/kubevirt-operator.yaml
+          curl -vL -o ./deploy/2-kubevirt-cr.yaml https://github.com/kubevirt/kubevirt/releases/download/${RELEASE}/kubevirt-cr.yaml
+
+          git add ./deploy || true
+          git commit -m "feat: ${RELEASE}" || true
+
+          git push origin ${RELEASE} || true
