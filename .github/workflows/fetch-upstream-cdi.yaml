@@ -22,7 +22,7 @@ jobs:
         run: |
           export TAG=$(curl -s -w %{redirect_url} https://github.com/kubevirt/containerized-data-importer/releases/latest)
           export VERSION=$(echo ${TAG##*/})
-          git checkout -b cdi-${VERSION} main || git checkout cdi-${VERSION}
+          git checkout -b cdi-${VERSION} master || git checkout cdi-${VERSION}
           mkdir ./deploy
 
           mv ./kustomization-cdi.tmpl.yaml ./deploy/kustomization.yaml
