@@ -3,20 +3,29 @@ name: Fetch upstream (CDI)
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 0 * * *
+    - cron: "0 0 * * *"
 
 jobs:
   fetch-upstream:
     runs-on: ubuntu-latest
     steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@f2acddfb5195534d487896a656232b016a682f3c # v1
+        id: app-token
+        with:
+          app-id: "${{ secrets.BOT_APP_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Git setup
         shell: bash
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
+          git config --global user.name 'drag0n141-bot[bot]'
+          git config --global user.email '143080396+drag0n141-bot[bot]@users.noreply.github.com'
+
       - name: Fetch files
         shell: bash
         run: |
