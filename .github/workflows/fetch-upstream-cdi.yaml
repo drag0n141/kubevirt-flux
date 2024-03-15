@@ -2,8 +2,15 @@ name: Fetch upstream (CDI)
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * *"
+  push:
+    branches:
+      - master
+    paths:
+      - .github/workflows/fetch-upstream-cdi.yaml
+
+env:
+  # renovate: datasource=github-releases depName=kubevirt/containerized-data-importer
+  KUBEVIRTCDI_VERSION: v1.58.1
 
 jobs:
   fetch-upstream:
@@ -29,16 +36,14 @@ jobs:
       - name: Fetch files
         shell: bash
         run: |
-          export TAG=$(curl -s -w %{redirect_url} https://github.com/kubevirt/containerized-data-importer/releases/latest)
-          export VERSION=$(echo ${TAG##*/})
-          git checkout -b cdi-${VERSION} master || git checkout cdi-${VERSION}
+          git checkout -b cdi-${KUBEVIRTCDI_VERSION} master || git checkout cdi-${KUBEVIRTCDI_VERSION}
           mkdir ./deploy
 
           mv ./kustomization-cdi.tmpl.yaml ./deploy/kustomization.yaml
-          curl -vL -o ./deploy/1-cdi-operator.yaml https://github.com/kubevirt/containerized-data-importer/releases/download/$VERSION/cdi-operator.yaml
-          curl -vL -o ./deploy/2-cdi-cr.yaml https://github.com/kubevirt/containerized-data-importer/releases/download/$VERSION/cdi-cr.yaml
+          curl -vL -o ./deploy/1-cdi-operator.yaml https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRTCDI_VERSION}/cdi-operator.yaml
+          curl -vL -o ./deploy/2-cdi-cr.yaml https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRTCDI_VERSION}/cdi-cr.yaml
 
           git add ./deploy || true
-          git commit -m "feat: cdi-${VERSION}" || true
+          git commit -m "feat: cdi-${${KUBEVIRTCDI_VERSION}}" || true
 
-          git push origin cdi-${VERSION} || true
+          git push origin cdi-${${KUBEVIRTCDI_VERSION}} || true
