@@ -44,6 +44,6 @@ jobs:
           curl -vL -o ./deploy/2-cdi-cr.yaml https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRTCDI_VERSION}/cdi-cr.yaml
 
           git add ./deploy || true
-          git commit -m "feat: cdi-${${KUBEVIRTCDI_VERSION}}" || true
+          git commit -m "feat: cdi-${KUBEVIRTCDI_VERSION}" || true
 
-          git push origin cdi-${${KUBEVIRTCDI_VERSION}} || true
+          git push origin cdi-${KUBEVIRTCDI_VERSION} || true
