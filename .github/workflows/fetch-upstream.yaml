@@ -5,6 +5,11 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
+env:
+  # renovate: datasource=github-releases depName=kubevirt/kubevirt
+  KUBEVIRT_VERSION: v1.1.0
+
+
 jobs:
   fetch-upstream:
     runs-on: ubuntu-latest
@@ -29,15 +34,14 @@ jobs:
       - name: Fetch files
         shell: bash
         run: |
-          export RELEASE=$(curl -s https://storage.googleapis.com/kubevirt-prow/release/kubevirt/kubevirt/stable.txt)
-          git checkout -b ${RELEASE} master || git checkout ${RELEASE}
+          git checkout -b ${KUBEVIRT_VERSION} master || git checkout ${KUBEVIRT_VERSION}
           mkdir ./deploy
 
           mv ./kustomization.tmpl.yaml ./deploy/kustomization.yaml
-          curl -vL -o ./deploy/1-kubevirt-operator.yaml https://github.com/kubevirt/kubevirt/releases/download/${RELEASE}/kubevirt-operator.yaml
-          curl -vL -o ./deploy/2-kubevirt-cr.yaml https://github.com/kubevirt/kubevirt/releases/download/${RELEASE}/kubevirt-cr.yaml
+          curl -vL -o ./deploy/1-kubevirt-operator.yaml https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml
+          curl -vL -o ./deploy/2-kubevirt-cr.yaml https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml
 
           git add ./deploy || true
-          git commit -m "feat: ${RELEASE}" || true
+          git commit -m "feat: ${KUBEVIRT_VERSION}" || true
 
-          git push origin ${RELEASE} || true
+          git push origin ${KUBEVIRT_VERSION} || true
