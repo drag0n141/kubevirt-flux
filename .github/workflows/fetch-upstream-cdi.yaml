@@ -10,7 +10,7 @@ on:
 
 env:
   # renovate: datasource=github-releases depName=kubevirt/containerized-data-importer
-  KUBEVIRTCDI_VERSION: v1.60.2
+  KUBEVIRTCDI_VERSION: v1.60.3
 
 jobs:
   fetch-upstream:
