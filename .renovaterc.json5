@@ -7,7 +7,7 @@
     ":disableRateLimiting",
     ":semanticCommits",
     ":automergeDigest",
-    "github>drag0n141/kubevirt-flux//.github/renovate/autoMerge.json5",
+    "github>drag0n141/kubevirt-flux//.renovate/autoMerge.json5",
     "helpers:pinGitHubActionDigests"
   ],
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
