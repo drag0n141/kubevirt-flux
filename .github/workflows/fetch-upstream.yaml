@@ -10,7 +10,7 @@ on:
 
 env:
   # renovate: datasource=github-releases depName=kubevirt/kubevirt
-  KUBEVIRT_VERSION: v1.8.4
+  KUBEVIRT_VERSION: v1.9.0
 
 jobs:
   fetch-upstream:
